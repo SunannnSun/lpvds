@@ -1,6 +1,6 @@
 # Directionality-aware Mixture Model based Linear Parameter Varying Dynamical Systems
 
-This is the implementation of the Directionality-aware Mixture Model (DAMM) based Linear Parameter Varying Dynamical Systems (LPV-DS) framework. This package provides necessary tools to load data from different sources, and an environment to output the learned Dynamical System (DS) for real robot usage, using DAMM and optimization. 
+Boiler plate module of LPV-DS framework which can inegrate any clustering and optimization methods
 
 
 ![Picture1](https://github.com/SunannnSun/damm_lpvds/assets/97807687/5a72467b-c771-4e8a-a0e0-7828efa59952)
