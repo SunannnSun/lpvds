@@ -1,20 +1,17 @@
-# Directionality-aware Mixture Model based Linear Parameter Varying Dynamical Systems
+# Linear Parameter Varying Dynamical Systems (LPV-DS)
 
-Boiler plate module of LPV-DS framework which can inegrate any clustering and optimization methods
-
-
-![Picture1](https://github.com/SunannnSun/damm_lpvds/assets/97807687/5a72467b-c771-4e8a-a0e0-7828efa59952)
+Boiler plate code of LPV-DS framework, compatible with any customizing clustering and optimization methods. Providing utilies functions from loading_tools, process_tools, plot_tools, and evaluation_tool to test on any variant of LPV-DS framework.
 
 
+<!-- ![Picture1](https://github.com/SunannnSun/damm_lpvds/assets/97807687/5a72467b-c771-4e8a-a0e0-7828efa59952) -->
 
 
-## Usage
-Note this module does not contatin DAMM nor the optimization package. Please follow the instruction below:
+
+
+## Usage Example
+Using DAMM-based LPV-DS as an example, 
 ```
-git clone https://github.com/SunannnSun/damm_lpvds.git
-```
-```
-cd damm_lpvds
+cd src
 ```
 ```
 git clone https://github.com/SunannnSun/damm.git
@@ -35,8 +32,7 @@ source env3.8/bin/activate
 pip install -r requirements.txt
 ```
 
-Run the main.py as a module to resolve relative imports
-
+Run
 ```
-python3 -m damm_lpvds.main
+python main.py
 ```
