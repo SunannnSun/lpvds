@@ -92,7 +92,7 @@ def plot_gmm(x_train, label):
 
 
 
-def plot_ds(x_train, x_test):
+def plot_ds(x_train, x_test_list):
     N = x_train.shape[1]
 
     fig = plt.figure(figsize=(12, 10))
@@ -103,7 +103,9 @@ def plot_ds(x_train, x_test):
     elif N == 3:
         ax = fig.add_subplot(projection='3d')
         ax.scatter(x_train[:, 0], x_train[:, 1], x_train[:, 2], 'o', color='k', s=3, alpha=0.4, label="Demonstration")
-        ax.plot(x_test[:, 0], x_test[:, 1], x_test[:, 2], color= 'b')
+
+        for idx, x_test in enumerate(x_test_list):
+            ax.plot(x_test[:, 0], x_test[:, 1], x_test[:, 2], color= 'b')
         ax.set_xlabel(r'$\xi_1$', fontsize=38, labelpad=20)
         ax.set_ylabel(r'$\xi_2$', fontsize=38, labelpad=20)
         ax.set_zlabel(r'$\xi_3$', fontsize=38, labelpad=20)

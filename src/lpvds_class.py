@@ -22,7 +22,7 @@ class lpvds_class():
     def _cluster(self):
         param ={
             "mu_0":           np.zeros((self.dim, )), 
-            "sigma_0":        5 * np.eye(self.dim),
+            "sigma_0":        1 * np.eye(self.dim),
             "nu_0":           self.dim,
             "kappa_0":        1,
             "sigma_dir_0":    1,
