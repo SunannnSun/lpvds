@@ -25,7 +25,7 @@ lpvds.begin()
 
 x_init = np.vstack(x_init)
 
-x_init = [np.mean(x_init[:4, :], axis=0, keepdims=True), np.mean(x_init[4:, :], axis=0, keepdims=True)]
+x_init = [np.mean(x_init[:3, :], axis=0, keepdims=True), np.mean(x_init[3:, :], axis=0, keepdims=True)]
 
 
 x_test_list = []
