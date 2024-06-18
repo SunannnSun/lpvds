@@ -9,7 +9,7 @@ Boiler plate code of LPV-DS framework, compatible with any customizing clusterin
 
 
 ## Usage Example
-Using DAMM-based LPV-DS as an example, 
+Using Damm-based LPV-DS as an example, 
 ```
 cd src
 ```
@@ -20,7 +20,7 @@ git clone https://github.com/SunannnSun/damm.git
 git clone https://github.com/SunannnSun/ds_opt.git
 ```
 
-Compile DAMM module
+Compile Damm module
 - Please refer to the **compilation** section in [damm repository](https://github.com/SunannnSun/damm).
 
 Create a python virtual environment and install the dependencies

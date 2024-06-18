@@ -51,8 +51,8 @@ def load_data(input_opt):
             L = data_.shape[0]
             L_sub = np.random.choice(range(L), 6, replace=False)
 
-            x     = [data_[l, 0][:N, :].T  for l in L_sub]
-            x_dot = [data_[l, 0][N:, :].T  for l in L_sub]
+            x     = [data_[l, 0][:N, :].T  for l in range(L)]
+            x_dot = [data_[l, 0][N:, :].T  for l in range(L)]
 
 
     elif input_opt == 2:
@@ -92,7 +92,7 @@ def load_data(input_opt):
 
 
     elif input_opt == 3:
-        print("\nYou selected DAMM demo dataset.\n")
+        print("\nYou selected Damm demo dataset.\n")
 
         damm_list = ["bridge", "Nshape", "orientation"]
         

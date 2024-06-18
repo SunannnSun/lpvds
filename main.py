@@ -10,7 +10,7 @@ input_message = '''
 Please choose a data input option:
 1. PC-GMM benchmark data
 2. LASA benchmark data
-3. DAMM demo data
+3. Damm demo data
 4. DEMO
 Enter the corresponding option number: '''
 input_opt  = input(input_message)
@@ -26,7 +26,6 @@ lpvds.begin()
 x_init = np.vstack(x_init)
 
 x_init = [np.mean(x_init[:3, :], axis=0, keepdims=True), np.mean(x_init[3:, :], axis=0, keepdims=True)]
-
 
 x_test_list = []
 

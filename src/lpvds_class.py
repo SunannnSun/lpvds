@@ -12,7 +12,7 @@ class lpvds_class():
         self.x      = x
         self.x_dot  = x_dot
         self.x_att  = x_att
-        self.dim    = x.shape[1]
+        self.dim    = 2*x.shape[1]  # either 4 or 6
 
         # simulation parameters
         self.tol = 10E-3

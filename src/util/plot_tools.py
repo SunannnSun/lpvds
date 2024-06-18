@@ -99,7 +99,8 @@ def plot_ds(x_train, x_test_list):
     if N == 2:
         ax = fig.add_subplot()
         ax.scatter(x_train[:, 0], x_train[:, 1], color='k', s=1, alpha=0.4, label="Demonstration")
-        ax.plot(x_test[:, 0], x_test[:, 1], color= 'b')
+        for idx, x_test in enumerate(x_test_list):
+            ax.plot(x_test[:, 0], x_test[:, 1], color= 'b')
     elif N == 3:
         ax = fig.add_subplot(projection='3d')
         ax.scatter(x_train[:, 0], x_train[:, 1], x_train[:, 2], 'o', color='k', s=3, alpha=0.4, label="Demonstration")
