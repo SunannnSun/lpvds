@@ -9,30 +9,30 @@ Boiler plate code of LPV-DS framework, compatible with any customizing clusterin
 
 
 ## Usage Example
-Using Damm-based LPV-DS as an example, 
+
+Fetch the required submodules
 ```
-cd src
-```
-```
-git clone https://github.com/SunannnSun/damm.git
-```
-```
-git clone https://github.com/SunannnSun/ds_opt.git
+git submodule update --init --recursive
 ```
 
-Compile Damm module
-- Please refer to the **compilation** section in [damm repository](https://github.com/SunannnSun/damm).
+Compile [DAMM](https://github.com/SunannnSun/damm) submodule
+```
+cd src/damm/build
+cmake ../src
+make
+```
 
-Create a python virtual environment and install the dependencies
+Return to root directory and install all dependencies in a virtual environment
 - Make sure to replace `/path/to/python3.8` with the correct path to the Python 3.8 executable on your system. 
 
 ```
-virtualenv -p /path/to/python3.8 env3.8
-source env3.8/bin/activate
+cd -
+virtualenv -p /path/to/python3.8 venv
+source venv.8/bin/activate
 pip install -r requirements.txt
 ```
 
-Run
+Run 
 ```
 python main.py
 ```

@@ -113,7 +113,7 @@ def load_data(input_opt):
 
     elif input_opt == 4:
         print("\nYou selected demo.\n")
-        input_path  = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..", "..", "dataset", "demo", "all.mat")
+        input_path  = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..", "..", "dataset", "demo", "obstacle", "all.mat")
         x, x_dot    = _process_bag(input_path)
 
     return _pre_process(x, x_dot)
