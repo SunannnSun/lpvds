@@ -2,7 +2,7 @@ import numpy as np
 
 """ uncomment the imports below if using DAMM; otherwise import your own methods """
 from .damm.damm_class import damm_class
-from .ds_opt.dsopt_class import dsopt_class
+from .dsopt.dsopt_class import dsopt_class
 
 
 
