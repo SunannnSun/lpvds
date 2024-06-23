@@ -1,8 +1,15 @@
+import os, sys, json
 import numpy as np
 
 """ uncomment the imports below if using DAMM; otherwise import your own methods """
 from .damm.damm_class import damm_class
 from .dsopt.dsopt_class import dsopt_class
+
+
+
+def write_json(data, path):
+    with open(path, "w") as json_file:
+        json.dump(data, json_file, indent=4)
 
 
 
@@ -17,6 +24,10 @@ class lpvds_class():
         # simulation parameters
         self.tol = 10E-3
         self.max_iter = 10000
+
+        # define output path
+        file_path           = os.path.dirname(os.path.realpath(__file__))  
+        self.output_path    = os.path.join(os.path.dirname(file_path), 'output_pos.json')
 
 
     def _cluster(self):
@@ -74,3 +85,30 @@ class lpvds_class():
 
         return np.vstack(x_test)
 
+
+
+
+    def _logOut(self, *args): 
+            Prior = self.damm.Prior
+            Mu    = self.damm.Mu
+            Sigma = self.damm.Sigma
+
+            json_output = {
+                "name": "DAMM-LPVDS",
+
+                "K": self.K,
+                "M": Mu.shape[1],
+                "Prior": Prior,
+                "Mu": Mu.ravel().tolist(),
+                "Sigma": Sigma.ravel().tolist(),
+
+                'A': self.A.ravel().tolist(),
+                'attractor': self.x_att.ravel().tolist(),
+                'att_all': self.x_att.ravel().tolist(),
+                "gripper_open": 0
+            }
+
+            if len(args) == 0:
+                write_json(json_output, self.output_path)
+            else:
+                write_json(json_output, os.path.join(args[0], '0.json'))
