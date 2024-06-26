@@ -66,11 +66,13 @@ class lpvds_class():
             x_dot  += gamma[k, 0] * self.A[k] @ (x - self.x_att).T
         x_next = x + x_dot.T * dt
 
-        return x_next
+        return x_next, gamma, x_dot
 
 
     def sim(self, x_init, dt):
         x_test = [x_init]
+        gamma_test = []
+        v_test = []
 
         i = 0
         while np.linalg.norm(x_test[-1]-self.x_att) >= self.tol:
@@ -78,8 +80,10 @@ class lpvds_class():
                 print("Exceed max iteration")
                 break
 
-            x_next = self._step(x_test[-1], dt)
+            x_next, gamma, v = self._step(x_test[-1], dt)
             x_test.append(x_next)        
+            gamma_test.append(gamma[:, 0])
+            v_test.append(v)
 
             i += 1
 
