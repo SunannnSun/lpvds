@@ -31,16 +31,16 @@ class lpvds_class():
 
 
     def _cluster(self):
-        param ={
+        self.param ={
             "mu_0":           np.zeros((self.dim, )), 
-            "sigma_0":        1 * np.eye(self.dim),
+            "sigma_0":        0.1 * np.eye(self.dim),
             "nu_0":           self.dim,
-            "kappa_0":        1,
-            "sigma_dir_0":    1,
+            "kappa_0":        0.1,
+            "sigma_dir_0":    0.1,
             "min_thold":      10
         }
-
-        self.damm  = damm_class(self.x, self.x_dot, param)
+        
+        self.damm  = damm_class(self.x, self.x_dot, self.param)
         self.gamma = self.damm.begin()
 
         self.assignment_arr = np.argmax(self.gamma, axis=0)
@@ -116,3 +116,30 @@ class lpvds_class():
                 write_json(json_output, self.output_path)
             else:
                 write_json(json_output, os.path.join(args[0], '0.json'))
+
+
+
+
+    def begin_next(self, x_new, x_dot_new, x_att_new):
+        
+        # shift new data
+        shift = self.x_att - x_att_new
+        x_new_shift = x_new + np.tile(shift, (x_new.shape[0], 1))
+        
+        # combine batches
+        self.x = np.vstack((self.x, x_new_shift))
+        self.x_dot = np.vstack((self.x_dot, x_dot_new))
+
+        # construct assignment arr
+        comb_assignment_arr = np.concatenate((self.assignment_arr, -1 * np.ones((x_new.shape[0]), dtype=np.int32)))
+        
+        # run damm
+        self.damm  = damm_class(self.x, self.x_dot, self.param)
+        self.gamma = self.damm.begin(comb_assignment_arr)
+        self.assignment_arr = np.argmax(self.gamma, axis=0)
+        self.K     = self.gamma.shape[0]
+
+        # re-learn A
+        self._optimize()
+
+

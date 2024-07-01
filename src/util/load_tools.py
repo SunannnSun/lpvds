@@ -116,6 +116,14 @@ def load_data(input_opt):
         input_path  = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..", "..", "dataset", "demo", "obstacle", "all.mat")
         x, x_dot    = _process_bag(input_path)
 
+
+
+    elif input_opt == 'increm':
+        print("\nYou selected demo.\n")
+        input_path  = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..", "..", "dataset", "increm", "all.mat")
+        x, x_dot    = _process_bag(input_path)
+
+
     return _pre_process(x, x_dot)
 
 
