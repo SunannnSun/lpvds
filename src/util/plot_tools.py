@@ -12,57 +12,6 @@ plt.rcParams.update({
 
 
 
-
-def plot_reference(Data, att):
-    fig = plt.figure(figsize=(8, 6))
-    M = len(Data) / 2  # store 1 Dim of Data
-    if M == 2:
-        ax = fig.add_subplot(111)
-        ax.set_xlabel(r'$\xi_1$')
-        ax.set_ylabel(r'$\xi_2$')
-        ax.set_title('Reference Trajectory')
-
-        # Plot the position trajectories
-        plt.plot(Data[0], Data[1], 'ro', markersize=1)
-        # plot attractor
-        # plt.scatter(att[0], att[1], s=100, c='blue', alpha=0.5)
-        plt.scatter(att[0], att[1], marker=(8, 2, 0), s=100, c='k')
-
-        # Plot Velocities of Reference Trajectories
-        vel_points = Data[:, ::vel_sample]
-        U = np.zeros(len(vel_points[0]))
-        V = np.zeros(len(vel_points[0]))  # （385,)
-        for i in np.arange(0, len(vel_points[0])):
-            dir_ = vel_points[2:, i] / np.linalg.norm(vel_points[2:, i])
-            U[i] = dir_[0]
-            V[i] = dir_[1]
-        q = ax.quiver(vel_points[0], vel_points[1], U, V, width=0.005, scale=vel_size)
-    else:
-        ax = fig.add_subplot(projection='3d')
-        ax.plot(Data[0], Data[1], Data[2], 'ro', markersize=1.5)
-        ax.scatter(att[0], att[1], att[2], s=200, c='blue', alpha=0.5)
-        ax.axis('auto')
-        ax.set_title('Reference Trajectory')
-        ax.set_xlabel(r'$\xi_1(m)$')
-        ax.set_ylabel(r'$\xi_2(m)$')
-        ax.set_zlabel(r'$\xi_3(m)$')
-        vel_points = Data[:, ::vel_sample]
-        U = np.zeros(len(vel_points[0]))
-        V = np.zeros(len(vel_points[0]))
-        W = np.zeros(len(vel_points[0]))
-        for i in np.arange(0, len(vel_points[0])):
-            dir_ = vel_points[3:, i] / np.linalg.norm(vel_points[3:, i])
-            U[i] = dir_[0]
-            V[i] = dir_[1]
-            W[i] = dir_[2]
-        q = ax.quiver(vel_points[0], vel_points[1], vel_points[2], U, V, W, length=0.04, normalize=True,colors='k')
-
-
-    plt.show()
-
-
-
-
 def plot_gmm(x_train, label):
     N = x_train.shape[1]
 
@@ -92,8 +41,41 @@ def plot_gmm(x_train, label):
 
 
 
+def plot_ds_2d(x_train, x_test_list, lpvds, *args):
+    A = lpvds.A
+    att = lpvds.x_att
 
-def plot_ds(x_train, x_test_list):
+    fig = plt.figure(figsize=(16, 10))
+    ax = fig.add_subplot()
+
+    ax.scatter(x_train[:, 0], x_train[:, 1], color='k', s=5, label='original data')
+    for idx, x_test in enumerate(x_test_list):
+        ax.plot(x_test[:, 0], x_test[:, 1], color= 'r', linewidth=2)
+
+    x_min, x_max = ax.get_xlim()
+    y_min, y_max = ax.get_ylim()
+    plot_sample = 50
+    x_mesh,y_mesh = np.meshgrid(np.linspace(x_min,x_max,plot_sample),np.linspace(y_min,y_max,plot_sample))
+    X = np.vstack([x_mesh.ravel(), y_mesh.ravel()])
+    gamma = lpvds.damm.logProb(X.T)
+    for k in np.arange(len(A)):
+        if k == 0:
+            dx = gamma[k].reshape(1, -1) * (A[k] @ (X - att.T))  # gamma[k].reshape(1, -1): [1, num] dim x num
+        else:
+            dx +=  gamma[k].reshape(1, -1) * (A[k] @ (X - att.T)) 
+    u = dx[0,:].reshape((plot_sample,plot_sample))
+    v = dx[1,:].reshape((plot_sample,plot_sample))
+
+    plt.streamplot(x_mesh,y_mesh,u,v, density=3.0, color="black", arrowsize=1.1, arrowstyle="->")
+    plt.gca().set_aspect('equal')
+
+    if len(args) !=0:
+        ax.set_title(args[0])
+
+
+
+
+def plot_ds_3d(x_train, x_test_list):
     N = x_train.shape[1]
 
     fig = plt.figure(figsize=(12, 10))
@@ -102,6 +84,7 @@ def plot_ds(x_train, x_test_list):
         ax.scatter(x_train[:, 0], x_train[:, 1], color='k', s=1, alpha=0.4, label="Demonstration")
         for idx, x_test in enumerate(x_test_list):
             ax.plot(x_test[:, 0], x_test[:, 1], color= 'b')
+        
     elif N == 3:
         ax = fig.add_subplot(projection='3d')
         ax.scatter(x_train[:, 0], x_train[:, 1], x_train[:, 2], 'o', color='k', s=3, alpha=0.4, label="Demonstration")

@@ -6,7 +6,7 @@ from src.lpvds_class import lpvds_class
 
 
 # load data (uncomment the below code section to enable data selection)
-""" 
+# """ 
 input_message = '''
 Please choose a data input option:
 1. PC-GMM benchmark data
@@ -15,9 +15,9 @@ Please choose a data input option:
 4. DEMO
 Enter the corresponding option number: '''
 input_opt  = input(input_message)
-""" 
+# """ 
 
-input_opt = 4
+# input_opt = 4
 x, x_dot, x_att, x_init = load_tools.load_data(int(input_opt))
 
 
@@ -37,5 +37,8 @@ for x_0 in x_init:
 
 # plot results
 plot_tools.plot_gmm(x, lpvds.assignment_arr)
-plot_tools.plot_ds(x, x_test_list)
+if x.shape[1] == 2:
+    plot_tools.plot_ds_2d(x, x_test_list, lpvds)
+else:
+    plot_tools.plot_ds_3d(x, x_test_list)
 plt.show()
