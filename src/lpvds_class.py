@@ -141,5 +141,7 @@ class lpvds_class():
 
         # re-learn A
         self._optimize()
+        self._logOut()
 
-
+        # store
+        self.x_new_shift = x_new_shift
