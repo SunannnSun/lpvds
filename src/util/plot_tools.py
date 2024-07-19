@@ -4,6 +4,7 @@ import matplotlib.lines as mlines
 from matplotlib.ticker import MaxNLocator
 import random
 
+
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "Times New Roman",
@@ -13,6 +14,7 @@ plt.rcParams.update({
 
 
 def plot_gmm(x_train, label, damm):
+    """ passing damm object to plot the ellipsoids of clustering results"""
     N = x_train.shape[1]
 
     colors = ["r", "g", "b", "k", 'c', 'm', 'y', 'crimson', 'lime'] + [
@@ -58,6 +60,7 @@ def plot_gmm(x_train, label, damm):
 
 
 def plot_ds_2d(x_train, x_test_list, lpvds, *args):
+    """ passing lpvds object to plot the streamline of DS (only in 2D)"""
     A = lpvds.A
     att = lpvds.x_att
 
@@ -137,8 +140,6 @@ def plot_incremental_ds(new_data, prev_data, att, x_test_list):
     old_label = mlines.Line2D([], [], color='magenta',
                         linewidth=3, label='New Demo')
     ax.legend(handles=[new_label, old_label])
-    
-
 
     L = len(x_test_list)
     for l in range(L):
@@ -147,8 +148,6 @@ def plot_incremental_ds(new_data, prev_data, att, x_test_list):
             ax.plot3D(x_test[:, 0], x_test[:, 1], x_test[:, 2], 'k', linewidth=3.5)
         else:
             ax.plot3D(x_test[:, 0], x_test[:, 1], x_test[:, 2], 'k', linewidth=3.5, label='Reproduction')
-
-
 
     ax.axis('auto')
     ax.set_xlabel(r'$\xi_1(m)$')

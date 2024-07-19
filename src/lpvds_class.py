@@ -48,14 +48,14 @@ class lpvds_class():
 
 
     def _optimize(self):
-
-        self.ds_opt = dsopt_class(self.x, self.x_dot, self.x_att, self.gamma)
+        self.ds_opt = dsopt_class(self.x, self.x_dot, self.x_att, self.gamma, self.assignment_arr)
         self.A = self.ds_opt.begin()
 
 
     def begin(self):
         self._cluster()
         self._optimize()
+        # self._logOut()
 
 
     def _step(self, x, dt):
