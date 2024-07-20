@@ -33,10 +33,10 @@ class lpvds_class():
     def _cluster(self):
         self.param ={
             "mu_0":           np.zeros((self.dim, )), 
-            "sigma_0":        0.1 * np.eye(self.dim),
+            "sigma_0":        0.01 * np.eye(self.dim),
             "nu_0":           self.dim,
-            "kappa_0":        0.1,
-            "sigma_dir_0":    0.1,
+            "kappa_0":        0.01,
+            "sigma_dir_0":    0.01,
             "min_thold":      10
         }
         
@@ -56,6 +56,13 @@ class lpvds_class():
         self._cluster()
         self._optimize()
         # self._logOut()
+
+
+    def elasticUpdate(self, new_traj, new_gmm_struct):
+        x_new, x_dot_new, assignment_arr_new, gamma_new = self.damm.elasticUpdate(new_traj, new_gmm_struct)
+
+        self.ds_opt = dsopt_class(x_new, x_dot_new, self.x_att, gamma_new, assignment_arr_new)
+        self.A = self.ds_opt.begin()
 
 
     def _step(self, x, dt):
