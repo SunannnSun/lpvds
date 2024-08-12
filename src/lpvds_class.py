@@ -33,10 +33,10 @@ class lpvds_class():
     def _cluster(self):
         self.param ={
             "mu_0":           np.zeros((self.dim, )), 
-            "sigma_0":        0.01 * np.eye(self.dim),
+            "sigma_0":        0.1 * np.eye(self.dim),
             "nu_0":           self.dim,
-            "kappa_0":        0.01,
-            "sigma_dir_0":    0.01,
+            "kappa_0":        0.1,
+            "sigma_dir_0":    0.1,
             "min_thold":      10
         }
         
@@ -152,3 +152,31 @@ class lpvds_class():
 
         # store
         self.x_new_shift = x_new_shift
+
+
+    def evaluate(self):
+        x = self.x
+        x_dot = self.x_dot
+
+        x_dot_pred     = np.zeros((x.shape)).T
+        gamma = self.damm.logProb(x)
+        for k in range(self.K):
+            x_dot_pred  += gamma[k, :].reshape(1, -1) * (self.A[k] @ (x - self.x_att).T)
+
+        MSE = np.sum(np.linalg.norm(x_dot_pred-x_dot.T, axis=0))/x.shape[0]
+        
+        self.x_dot_pred = x_dot_pred
+        
+        return MSE
+    
+
+    def predict(self, x):
+        """x has to be [M, N], M is number of points, N is dimension"""
+        x_dot_pred     = np.zeros((x.shape)).T
+
+        gamma = self.damm.logProb(x)
+
+        for k in range(self.K):
+            x_dot_pred  += gamma[k, :].reshape(1, -1) * (self.A[k] @ (x - self.x_att).T)
+
+        return x_dot_pred
