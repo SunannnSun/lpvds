@@ -1,4 +1,4 @@
-import os, sys, json
+import os, sys, json, time
 import numpy as np
 
 """ uncomment the imports below if using DAMM; otherwise import your own methods """
@@ -29,18 +29,18 @@ class lpvds_class():
         file_path           = os.path.dirname(os.path.realpath(__file__))  
         self.output_path    = os.path.join(os.path.dirname(file_path), 'output_pos.json')
 
-
-    def _cluster(self):
         self.param ={
             "mu_0":           np.zeros((self.dim, )), 
-            "sigma_0":        0.1 * np.eye(self.dim),
+            "sigma_0":        0.01 * np.eye(self.dim),
             "nu_0":           self.dim,
-            "kappa_0":        0.1,
-            "sigma_dir_0":    0.1,
+            "kappa_0":        0.01,
+            "sigma_dir_0":    0.01,
             "min_thold":      10
         }
         
         self.damm  = damm_class(self.x, self.x_dot, self.param)
+
+    def _cluster(self):
         self.gamma = self.damm.begin()
 
         self.assignment_arr = np.argmax(self.gamma, axis=0)
@@ -60,7 +60,8 @@ class lpvds_class():
 
     def elasticUpdate(self, new_traj, new_gmm_struct):
         x_new, x_dot_new, assignment_arr_new, gamma_new = self.damm.elasticUpdate(new_traj, new_gmm_struct)
-
+        
+        self.K     = gamma_new.shape[0]
         self.ds_opt = dsopt_class(x_new, x_dot_new, self.x_att, gamma_new, assignment_arr_new)
         self.A = self.ds_opt.begin()
 

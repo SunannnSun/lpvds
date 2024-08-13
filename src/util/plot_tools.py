@@ -120,6 +120,8 @@ def plot_ds_3d(x_train, x_test_list):
         ax.yaxis.set_major_locator(MaxNLocator(nbins=3))
         ax.zaxis.set_major_locator(MaxNLocator(nbins=3))
         ax.tick_params(axis='z', which='major', pad=15)
+        ax.axis('equal')
+
 
 
 
