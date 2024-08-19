@@ -35,7 +35,7 @@ class lpvds_class():
             "nu_0":           self.dim,
             "kappa_0":        0.01,
             "sigma_dir_0":    0.01,
-            "min_thold":      10
+            "min_thold":      0
         }
         
         self.damm  = damm_class(self.x, self.x_dot, self.param)
