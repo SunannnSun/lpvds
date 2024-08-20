@@ -58,12 +58,14 @@ class lpvds_class():
         # self._logOut()
 
 
-    def elasticUpdate(self, new_traj, new_gmm_struct):
+    def elasticUpdate(self, new_traj, new_gmm_struct, att_new):
         x_new, x_dot_new, assignment_arr_new, gamma_new = self.damm.elasticUpdate(new_traj, new_gmm_struct)
-        
+        self.x_att = att_new
         self.K     = gamma_new.shape[0]
-        self.ds_opt = dsopt_class(x_new, x_dot_new, self.x_att, gamma_new, assignment_arr_new)
+        self.ds_opt = dsopt_class(x_new, x_dot_new, att_new, gamma_new, assignment_arr_new)
         self.A = self.ds_opt.begin()
+
+        self._logOut()
 
 
     def _step(self, x, dt):
@@ -117,6 +119,7 @@ class lpvds_class():
                 'A': self.A.ravel().tolist(),
                 'attractor': self.x_att.ravel().tolist(),
                 'att_all': self.x_att.ravel().tolist(),
+                'x_0': self.x[0, :].ravel().tolist(),
                 "gripper_open": 0
             }
 
