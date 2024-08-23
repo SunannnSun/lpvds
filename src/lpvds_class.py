@@ -7,7 +7,7 @@ from .dsopt.dsopt_class import dsopt_class
 
 
 
-def write_json(data, path):
+def _write_json(data, path):
     with open(path, "w") as json_file:
         json.dump(data, json_file, indent=4)
 
@@ -19,6 +19,7 @@ class lpvds_class():
         self.x      = x
         self.x_dot  = x_dot
         self.x_att  = x_att
+        self.x_0    = x[0, :]
         self.dim    = 2*x.shape[1]  # either 4 or 6
 
         # simulation parameters
@@ -61,11 +62,12 @@ class lpvds_class():
     def elasticUpdate(self, new_traj, new_gmm_struct, att_new):
         x_new, x_dot_new, assignment_arr_new, gamma_new = self.damm.elasticUpdate(new_traj, new_gmm_struct)
         self.x_att = att_new
+        self.x_0 = x_new[0, :]
         self.K     = gamma_new.shape[0]
         self.ds_opt = dsopt_class(x_new, x_dot_new, att_new, gamma_new, assignment_arr_new)
         self.A = self.ds_opt.begin()
 
-        self._logOut()
+        # self._logOut()
 
 
     def _step(self, x, dt):
@@ -102,7 +104,7 @@ class lpvds_class():
 
 
 
-    def _logOut(self, *args): 
+    def _logOut(self, write_json=True, *args): 
             Prior = self.damm.Prior
             Mu    = self.damm.Mu
             Sigma = self.damm.Sigma
@@ -119,15 +121,18 @@ class lpvds_class():
                 'A': self.A.ravel().tolist(),
                 'attractor': self.x_att.ravel().tolist(),
                 'att_all': self.x_att.ravel().tolist(),
-                'x_0': self.x[0, :].ravel().tolist(),
+                # 'x_0': self.x[0, :].ravel().tolist(),
+                'x_0': self.x_0.ravel().tolist(),
+
                 "gripper_open": 0
             }
+            if write_json:
+                if len(args) == 0:
+                    _write_json(json_output, self.output_path)
+                else:
+                    _write_json(json_output, os.path.join(args[0], '0.json'))
 
-            if len(args) == 0:
-                write_json(json_output, self.output_path)
-            else:
-                write_json(json_output, os.path.join(args[0], '0.json'))
-
+            return json_output
 
 
 
