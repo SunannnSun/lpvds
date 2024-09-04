@@ -1,0 +1,4 @@
+venv
+mosek/mosek.lic
+src/__pycache__/
+src/util/__pycache__/
