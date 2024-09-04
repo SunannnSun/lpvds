@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     python3 \
     python3-pip \
+    python3-tk\
     libblas-dev \
     liblapack-dev \
     gfortran \
@@ -20,6 +21,9 @@ RUN apt-get update && apt-get install -y \
     libomp-dev \
     libopencv-dev \
     time \
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

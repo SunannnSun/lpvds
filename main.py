@@ -1,5 +1,8 @@
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')  # Or 'Qt5Agg', 'Qt4Agg', etc.
 import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from src.util import load_tools, plot_tools
 from src.lpvds_class import lpvds_class
