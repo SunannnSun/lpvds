@@ -21,9 +21,7 @@ RUN apt-get update && apt-get install -y \
     libomp-dev \
     libopencv-dev \
     time \
-    texlive-latex-base \
-    texlive-latex-recommended \
-    texlive-latex-extra \
+    texlive-full \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

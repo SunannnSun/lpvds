@@ -18,8 +18,6 @@ Options:
 
   -v, --verbose          Use the verbose option during the building
                          process
-
-  -s, --serve            Start the remove development server
 "
 
 BUILD_FLAGS=(--build-arg BASE_TAG="${BASE_TAG}")
@@ -29,7 +27,6 @@ while [[ $# -gt 0 ]]; do
     -d|--development) BUILD_FLAGS+=(--target dependencies) ; IMAGE_TAG=development ; shift ;;
     -r|--rebuild) BUILD_FLAGS+=(--no-cache) ; shift ;;
     -v|--verbose) BUILD_FLAGS+=(--progress=plain) ; shift ;;
-    -s|--serve) SERVE_REMOTE=true ; shift ;;
     -h|--help) echo "${HELP_MESSAGE}" ; exit 0 ;;
     *) echo 'Error in command line parsing' >&2
        echo -e "\n${HELP_MESSAGE}"
@@ -44,7 +41,3 @@ done
 # fi
 
 DOCKER_BUILDKIT=1 docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" "${BUILD_FLAGS[@]}" -f ./docker/Dockerfile . || exit 1
-
-if [ "${SERVE_REMOTE}" = true ]; then
-  aica-docker server "${IMAGE_NAME}:${IMAGE_TAG}" -u ros2 -p "${REMOTE_SSH_PORT}"
-fi

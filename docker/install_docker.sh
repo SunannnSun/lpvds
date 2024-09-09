@@ -98,27 +98,3 @@ else
 fi
 
 
-# Install aica docker
-if [ ! command -v aica-docker &> /dev/null ]; then
-    while true; do
-        read -p "aica-docker command not found, do you whish to install it? It will install the latest version that worked with this script at the time of developpement. (y/n)?" yn
-        case $yn in
-            [Yy]* ) 
-                echo "Installing aica-docker..."
-                git clone git@github.com:aica-technology/docker-images.git /tmp
-                git --git-dir=/tmp/docker-images/.git checkout 5f8d908
-                sudo bash /tmp/docker-images/scripts/install-aica-docker.sh
-                rm -rf /tmp/docker-images
-                echo "aica-docker installed."
-                break;;
-            [Nn]* ) 
-                echo "Skipping installation of aica-docker. This might impair the start docker scripts execution."
-                break;;
-            * ) echo "Please answer y or n";;
-        esac
-    done
-else
-    echo "aica-docker already found, skipping install."
-fi
-
-
