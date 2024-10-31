@@ -44,9 +44,11 @@ class lpvds_class():
     def _cluster(self):
         self.gamma = self.damm.begin()
 
-        self.assignment_arr = np.argmax(self.gamma, axis=0)
-        self.K     = self.gamma.shape[0]
+        # self.assignment_arr = np.argmax(self.gamma, axis=0) # this would result in some component being empty
+        # self.K     = self.gamma.shape[0] 
 
+        self.assignment_arr = self.damm.assignment_arr
+        self.K = int(self.damm.K)
 
     def _optimize(self):
         self.ds_opt = dsopt_class(self.x, self.x_dot, self.x_att, self.gamma, self.assignment_arr)
