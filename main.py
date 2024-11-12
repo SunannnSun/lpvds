@@ -12,10 +12,10 @@ Please choose a data input option:
 3. Damm demo data
 4. DEMO
 Enter the corresponding option number: '''
-input_opt  = input(input_message)
+# input_opt  = input(input_message)
 # input_opt = 4
 
-x, x_dot, x_att, x_init = load_tools.load_data(int(input_opt))
+x, x_dot, x_att, x_init = load_tools.load_data(int(1))
 
 
 # run lpvds

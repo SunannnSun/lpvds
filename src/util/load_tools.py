@@ -28,8 +28,9 @@ def load_data(input_opt):
             if (i+1) % 6 ==0:
                 message += "\n"
         message += '\nEnter the corresponding option number [type 0 to exit]: '
-
-        data_opt = int(input(message))
+        
+        # data_opt = int(input(message))
+        data_opt = int(7)
         if data_opt == 0:
             sys.exit()
         elif data_opt<0 or data_opt>len(pcgmm_list):
@@ -132,6 +133,15 @@ def load_data(input_opt):
 
 
 
+    elif input_opt == 'apple':
+        print("\nYou selected apple.\n")
+        input_path = "/home/emp/lfd_ws/src/lfd_ds/demo/1/all.npz"
+        x, x_dot    = _process_npz(input_path)
+
+    else:
+        input_path = os.path.join(input_opt, "all.npz")
+        x, x_dot    = _process_npz(input_path) 
+
     return _pre_process(x, x_dot)
 
 
@@ -188,7 +198,7 @@ def _process_bag(path):
     x     = []
     x_dot = [] 
 
-    sample_step = 5
+    sample_step = 4
     vel_thresh  = 1e-3 
     
     for l in range(L):
@@ -208,6 +218,54 @@ def _process_bag(path):
         pos_traj  = pos_traj[:, first_non_zero_index:last_non_zero_index]
         quat_traj = quat_traj[:, first_non_zero_index:last_non_zero_index]
         time_traj = time_traj[:, first_non_zero_index:last_non_zero_index]
+        vel_traj = np.diff(pos_traj) / np.diff(time_traj)
+        
+        x.append(pos_traj[:, 0:-1].T)
+        x_dot.append(vel_traj.T)
+
+    return x, x_dot
+
+
+
+
+
+def _process_npz(path):
+    """ Process .npz files that is converted from .bag files """
+
+    data_ = np.load(path, allow_pickle=True)
+    data_ = data_['data_ee_pose']
+    L = data_.shape[0]
+
+    x     = []
+    x_dot = [] 
+
+    sample_step = 1
+    vel_thresh  = 1e-3 
+    
+    cutoff = 20
+    for l in range(L):
+        data_l = data_[l]['pose']
+        pos_traj  = data_l[:3, ::sample_step]
+        quat_traj = data_l[3:7, ::sample_step]
+        time_traj = data_l[-1, ::sample_step].reshape(1,-1)
+
+        raw_diff_pos = np.diff(pos_traj)
+        vel_mag = np.linalg.norm(raw_diff_pos, axis=0).flatten()
+        first_non_zero_index = np.argmax(vel_mag > vel_thresh)
+        last_non_zero_index = len(vel_mag) - 1 - np.argmax(vel_mag[::-1] > vel_thresh)
+
+        if first_non_zero_index >= last_non_zero_index:
+            raise Exception("Sorry, vel are all zero")
+
+        pos_traj  = pos_traj[:, first_non_zero_index:last_non_zero_index]
+        quat_traj = quat_traj[:, first_non_zero_index:last_non_zero_index]
+        time_traj = time_traj[:, first_non_zero_index:last_non_zero_index]
+
+
+        pos_traj  = pos_traj[:, cutoff: ]
+        quat_traj = quat_traj[:, cutoff: ]
+        time_traj = time_traj[:, cutoff: ]
+
         vel_traj = np.diff(pos_traj) / np.diff(time_traj)
         
         x.append(pos_traj[:, 0:-1].T)

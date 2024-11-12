@@ -27,6 +27,20 @@ def plot_gmm(x_train, label, damm):
         ax = fig.add_subplot()
         ax.scatter(x_train[:, 0], x_train[:, 1], color=color_mapping[:], alpha=0.4, label="Demonstration")
 
+
+        est_K = damm.K
+        Priors =damm.Prior
+        Mu = damm.Mu.T
+        Sigma = damm.Sigma
+
+        from gmr import GMM, plot_error_ellipses
+        gmm = GMM(est_K, Priors, Mu.T, Sigma)
+        plot_error_ellipses(ax, gmm, alpha=0.1, colors=colors)
+        for num in np.arange(0, len(Mu[0])):
+            plt.text(Mu[0][num], Mu[1][num], str(num+1), fontsize=20)
+
+
+
     elif N == 3:
         ax = fig.add_subplot(projection='3d')
         ax.scatter(x_train[:, 0], x_train[:, 1], x_train[:, 2], 'o', color=color_mapping[:], s=3, alpha=0.4, label="Demonstration")

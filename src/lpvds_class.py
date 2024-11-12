@@ -32,14 +32,16 @@ class lpvds_class():
 
         self.param ={
             "mu_0":           np.zeros((self.dim, )), 
-            "sigma_0":        0.01 * np.eye(self.dim),
+            "sigma_0":        0.001 * np.eye(self.dim),
             "nu_0":           self.dim,
-            "kappa_0":        0.01,
-            "sigma_dir_0":    0.01,
+            "kappa_0":        0,
+            "sigma_dir_0":    0.001,
             "min_thold":      0
         }
         
         self.damm  = damm_class(self.x, self.x_dot, self.param)
+
+
 
     def _cluster(self):
         self.gamma = self.damm.begin()
